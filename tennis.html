@@ -26,6 +26,9 @@
 			
 			var player1Score = 0;
 			var player2Score = 0;
+			const WINNING_SCORE = 5;
+			
+			var showingWinScreen = false;
 			
 			function calculateMousePos(evt){
 				var rect = canvas.getBoundingClientRect();
@@ -39,12 +42,22 @@
 				};
 			}
 			
+			function handleMouseClick(evt) {
+				if (showingWinScreen) {
+					player1Score = 0;
+					player2Score = 0;
+					showingWinScreen = false;
+				}
+			}
+			
 			window.onload = function() {
 				canvas = document.getElementById('gameCanvas');
 				canvasContext = canvas.getContext('2d');
 				
 				var framesPerSecond = 30;
 				setInterval(callBoth, 1000/framesPerSecond);
+				
+				canvas.addEventListener('mousedown', handleMouseClick);
 
 				canvas.addEventListener('mousemove',
 					function(evt){
@@ -69,7 +82,10 @@
 				}
 			}
 			
-			function moveEverything(){	
+			function moveEverything(){
+				if (showingWinScreen){
+					return;
+				}
 				computerMovement();
 				
 				ballX = ballX + ballSpeedX;
@@ -78,11 +94,14 @@
 				if (ballX <= 0) {
 					if (ballY > paddle1Y &&
 						ballY < paddle1Y + PADDLE_HEIGHT) {
-							ballSpeedX = -ballSpeedX;
+							ballSpeedX = -ballSpeedX;							
+							var deltaY = ballY - (paddle1Y + PADDLE_HEIGHT/2);
+							ballSpeedY = deltaY * 0.33;
+							
 					}
 					else {
-						ballReset();
 						player2Score ++;
+						ballReset();	
 					}	
 				}
 				
@@ -90,10 +109,12 @@
 					if (ballY > paddle2Y &&
 						ballY < paddle2Y + PADDLE_HEIGHT) {
 							ballSpeedX = -ballSpeedX;
+							var deltaY = ballY - (paddle2Y + PADDLE_HEIGHT/2);
+							ballSpeedY = deltaY * 0.33;
 					}
 					else {
-						ballReset();
 						player1Score ++;
+						ballReset();
 					}	
 				}
 				
@@ -103,6 +124,11 @@
 			}
 			
 			function ballReset(){
+				if (player1Score >= WINNING_SCORE ||
+						player2Score >= WINNING_SCORE) {
+					showingWinScreen = true;
+				}
+				
 				ballSpeedX = -ballSpeedX;
 				ballX = canvas.width/2;
 				ballY = canvas.height/2;
@@ -112,6 +138,12 @@
 				//Canvas
 				colorRect(0,0,canvas.width,canvas.height, 'black');
 				
+				if (showingWinScreen) {
+					canvasContext.fillStyle = 'red';
+					canvasContext.fillText("Click to continue",100, 100);
+					return;
+				}
+	
 				//Left paddle
 				colorRect(0,paddle1Y,PADDLE_WIDTH,PADDLE_HEIGHT, 'white');
 				
