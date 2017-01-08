@@ -6,9 +6,13 @@
 	
 	<body>
 	
-		<h1>The Tennis Game</h1>
+		<h1>The Ping Pong Game</h1>
 
 		<canvas id="gameCanvas" width="800" height="600"></canvas>
+		
+		<p>The remake based on Chris DeLeon's course on udemy:</p>
+		<p><a href="https://www.udemy.com/code-your-first-game/learn/v4/overview">
+		Code Your First Game: Arcade Classic in JavaScript on Canvas</a></p>
 
 		<script>
 
@@ -18,6 +22,7 @@
 			var ballY = 300;
 			var ballSpeedX = 12;
 			var ballSpeedY = 5;
+			var radius = 10; //Radius of the ball
 			
 			var paddle1Y = 250;
 			var paddle2Y = 250;
@@ -88,10 +93,12 @@
 				}
 				computerMovement();
 				
+				checkPaddles();
+				
 				ballX = ballX + ballSpeedX;
 				ballY = ballY + ballSpeedY;
 				
-				if (ballX <= PADDLE_WIDTH) {
+				if ((ballX - radius) <= PADDLE_WIDTH) {
 					if (ballY > paddle1Y &&
 						ballY < paddle1Y + PADDLE_HEIGHT) {
 							ballSpeedX = -ballSpeedX;							
@@ -99,28 +106,35 @@
 							ballSpeedY = deltaY * 0.33;
 							
 					}
-					else if (ballX <= 0){
+					else if ((ballX - radius) <= 0){
 						player2Score ++;
 						ballReset();	
 					}	
 				}
 				
-				if (ballX >= canvas.width - PADDLE_WIDTH) {
+				if ((ballX + radius) >= canvas.width - PADDLE_WIDTH) {
 					if (ballY > paddle2Y &&
 						ballY < paddle2Y + PADDLE_HEIGHT) {
 							ballSpeedX = -ballSpeedX;
 							var deltaY = ballY - (paddle2Y + PADDLE_HEIGHT/2);
 							ballSpeedY = deltaY * 0.33;
 					}
-					else if (ballX >= canvas.width) {
+					else if ((ballX + radius) >= canvas.width) {
 						player1Score ++;
 						ballReset();
 					}	
 				}
 				
-				if (ballY >= canvas.height || ballY <= 0) {
+				if (ballY + radius >= canvas.height || ballY - radius <= 0) {
 					ballSpeedY = -ballSpeedY;
 				}
+			}
+			
+			function checkPaddles(){
+				if (paddle1Y <= 0) {paddle1Y = 0;}
+				if (paddle2Y <= 0) {paddle2Y = 0;}
+				if (paddle1Y >= canvas.height - PADDLE_HEIGHT) {paddle1Y = canvas.height - PADDLE_HEIGHT;}
+				if (paddle2Y >= canvas.height - PADDLE_HEIGHT) {paddle2Y = canvas.height - PADDLE_HEIGHT;}
 			}
 			
 			function ballReset(){
@@ -129,21 +143,36 @@
 					showingWinScreen = true;
 				}
 				
-				ballSpeedX = -ballSpeedX;
 				ballSpeedY = ballSpeedY * 0.33;
 				ballX = canvas.width/2;
 				ballY = canvas.height/2;
 			}
 			
+			function drawNet() {
+				for (var i = 0; i < canvas.height; i += 40) {
+					colorRect(canvas.width/2 - 1, i, 2, 20, 'white');
+				}
+			}
+			
 			function drawEverything(){	
 				//Canvas
 				colorRect(0,0,canvas.width,canvas.height, 'black');
-				
+						
+				//Show winner
 				if (showingWinScreen) {
 					canvasContext.fillStyle = 'red';
-					canvasContext.fillText("Click to continue",100, 100);
+					
+					if (player1Score > player2Score) {
+						canvasContext.fillText("Human won!",canvas.width/3, 100);
+					}else if (player1Score < player2Score){
+						canvasContext.fillText("Computer won!",canvas.width/3, 100);
+					}
+					
+					canvasContext.fillText("Click to continue",canvas.width/3, 200);
 					return;
 				}
+				
+				drawNet();
 	
 				//Left paddle
 				colorRect(0,paddle1Y,PADDLE_WIDTH,PADDLE_HEIGHT, 'white');
@@ -153,10 +182,13 @@
 						PADDLE_WIDTH,PADDLE_HEIGHT, 'white');
 				
 				//The ball
-				colorCircle(ballX, ballY, 10, 'white');
+				colorCircle(ballX, ballY, radius, 'white');
 				
+				//Current score
 				canvasContext.font = "30px Arial";
+				canvasContext.fillText("Human",200, 50);
 				canvasContext.fillText(player1Score,200, 100);
+				canvasContext.fillText("Computer",canvas.width-200, 50);
 				canvasContext.fillText(player2Score,canvas.width-200, 100);
 			}
 			
@@ -171,10 +203,7 @@
 				canvasContext.fillStyle = drawColor;
 				canvasContext.fillRect(leftX, topY, widht, height);
 			}
-
 			
-
 		</script>
-
 	</body>
 </html>
