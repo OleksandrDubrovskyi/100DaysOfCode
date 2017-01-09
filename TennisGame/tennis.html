@@ -2,18 +2,24 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	</head>
-	
-	<body>
-	
-		<h1>The Ping Pong Game</h1>
+		<link rel="stylesheet" media="screen" href="css/style.css" type="text/css">
+</head>
 
-		<canvas id="gameCanvas" width="800" height="600"></canvas>
+<body>
+
+	<div id="wrapper">
+		<div id="#xusha">
 		
-		<p>The remake based on Chris DeLeon's course on udemy:</p>
-		<p><a href="https://www.udemy.com/code-your-first-game/learn/v4/overview">
-		Code Your First Game: Arcade Classic in JavaScript on Canvas</a></p>
+			<h1>The Ping Pong Game</h1>
 
+			<canvas id="gameCanvas" width="800" height="600"></canvas>
+			
+			<p>The remake based on Chris DeLeon's course on udemy:</p>
+			<p><a href="https://www.udemy.com/code-your-first-game/learn/v4/overview">
+			Code Your First Game: Arcade Classic in JavaScript on Canvas</a></p>
+
+		</div>
+	</div>
 		<script>
 
 			var canvas;
@@ -162,16 +168,18 @@
 				if (showingWinScreen) {
 					canvasContext.fillStyle = 'red';
 					
-					if (player1Score > player2Score) {
+					if (player1Score >= WINNING_SCORE) {
+						canvasContext.fillStyle = 'green';
 						canvasContext.fillText("Human won!",canvas.width/3, 100);
-					}else if (player1Score < player2Score){
+					}else if (player2Score >= WINNING_SCORE){
+						canvasContext.fillStyle = 'green';
 						canvasContext.fillText("Computer won!",canvas.width/3, 100);
 					}
 					
 					canvasContext.fillText("Click to continue",canvas.width/3, 200);
 					return;
 				}
-				
+		
 				drawNet();
 	
 				//Left paddle

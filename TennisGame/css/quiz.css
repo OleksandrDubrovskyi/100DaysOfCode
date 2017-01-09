@@ -1,0 +1,22 @@
+div#quoteArea {
+  font-family: Sans;
+  font-size: 20px;
+  position: relative;
+  width: 50%;
+  height: 50%;
+  margin: auto;
+  background: pink;
+  color: green;
+  font-weight: bold;
+  padding: 50px 20px;
+  text-align: center;
+}
+
+.container-fluid {
+  background-color: black;
+  padding: 80px;
+}
+
+#buttons {
+  padding: 80px;
+}

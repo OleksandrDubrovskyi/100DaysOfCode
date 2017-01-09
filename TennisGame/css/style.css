@@ -1,0 +1,15 @@
+body {
+        background-color: #f0f0f2;
+        margin: 0;
+        padding: 0;
+        font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        
+    }
+	
+#xusha {
+        margin: 200px auto;
+        padding: 50px;
+        background-color: #fff;
+        border-radius: 1em;
+    }
+	
