@@ -16,7 +16,7 @@ namespace GeoQuiz
     {
         static void Main(string[] args)
         {
-            GeographyQuiz.Start();            
+            Menu.Start();
         }
 
     }

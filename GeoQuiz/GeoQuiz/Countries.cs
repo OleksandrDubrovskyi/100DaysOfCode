@@ -20,10 +20,11 @@ namespace GeoQuiz
 
         static country[] europe = new country[51];
 
-        public static void Start()
+        public static void StartQuiz()
         {
             GetEuropeanCountries();
             Quiz();
+            Menu.Start();
         }
 
         static void GetEuropeanCountries()
