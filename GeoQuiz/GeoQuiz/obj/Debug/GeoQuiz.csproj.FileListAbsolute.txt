@@ -4,3 +4,6 @@ C:\Users\user\Desktop\Specter_C#\OtherProjects\GeoQuiz\GeoQuiz\bin\Debug\GeoQuiz
 C:\Users\user\Desktop\Specter_C#\OtherProjects\GeoQuiz\GeoQuiz\obj\Debug\GeoQuiz.csprojResolveAssemblyReference.cache
 C:\Users\user\Desktop\Specter_C#\OtherProjects\GeoQuiz\GeoQuiz\obj\Debug\GeoQuiz.exe
 C:\Users\user\Desktop\Specter_C#\OtherProjects\GeoQuiz\GeoQuiz\obj\Debug\GeoQuiz.pdb
+C:\Users\user\Documents\100DaysOfCode\GeoQuiz\GeoQuiz\bin\Debug\GeoQuiz.exe.config
+C:\Users\user\Documents\100DaysOfCode\GeoQuiz\GeoQuiz\obj\Debug\GeoQuiz.exe
+C:\Users\user\Documents\100DaysOfCode\GeoQuiz\GeoQuiz\obj\Debug\GeoQuiz.pdb

@@ -23,7 +23,7 @@ namespace GeoQuiz
                     GeographyQuiz.StartQuiz();
                     break;
                 case "2":
-                    UsersQuiz.receiveUsersInput();
+                    UsersQuiz.ReceiveUsersInput();
                     break;
                 case "":
                     Environment.Exit(0);
