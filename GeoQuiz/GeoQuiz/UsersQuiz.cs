@@ -6,19 +6,35 @@ using System.Threading.Tasks;
 
 namespace GeoQuiz
 {
+    public struct quizItem
+    {
+        public string question;
+        public string answer;
+    }
+
     class UsersQuiz
     {
-        struct quizItem
-        {
-            public string question;
-            public string answer;
-        }
-
         List<quizItem> listOfQuestions = new List<quizItem>(10);
 
-        static Dictionary<string, List<quizItem>> userQuizes = new Dictionary<string, List<quizItem>>(10);
+        /// <summary>
+        /// Methods of the class
+        /// </summary>
 
-    // Methods
+        public static void Start()
+        {
+            string quizName = GetQuizName();
+
+            var quiz = DataBinding.LoadRecords(quizName);
+
+            if (quiz.Count == 0)
+            {
+                Console.WriteLine("Quiz {0} does not exist. Let's create it!", quizName);
+                quiz = CreateListOfQuestions(quiz, quizName);
+            }
+            else AskUser(quiz, quizName);
+
+            Menu.Start();
+        }
 
         static string GetQuizName()
         {
@@ -28,15 +44,43 @@ namespace GeoQuiz
             return quizName;
         }
 
-        // Checks if there is existing quiz with a given name
-        static List<quizItem> CheckQuizes(string quizName)
+        // The quiz exists. Does user want to take it
+        // or to add more questions?
+        static void AskUser(List<quizItem> quiz, string quizName)
         {
-            if (userQuizes.ContainsKey(quizName))
+            Console.WriteLine("Quiz {0} exists. To take it press 1,"
+                                + "to add more questions press 2", quizName);
+            string usersInput = Console.ReadLine();
+
+            switch (usersInput)
             {
-                var value = userQuizes[quizName];
-                return value;
+                case "1":
+                    TakeQuiz(quiz, quizName);
+                    break;
+                case "2":
+                    CreateListOfQuestions(quiz, quizName);
+                    break;
+                default:
+                    AskUser(quiz, quizName);
+                    break;
+
             }
-            else return null;
+        }
+
+        // Creates user quiz based on questions put by user
+        static List<quizItem> CreateListOfQuestions(List<quizItem> quiz, string quizName)
+        {
+            while (true)
+            {
+                var newQuestion = GetUsersQuestions();
+
+                if (newQuestion.question == "" || newQuestion.answer == "")
+                    break;
+                else quiz.Add(newQuestion);
+            }
+
+            DataBinding.SubmitRecords(quiz, quizName);
+            return quiz;
         }
 
         // Receives user questions for the current quiz
@@ -52,64 +96,11 @@ namespace GeoQuiz
             return usersQuestion;
         }
 
-        // Creates user quiz based on questions put by user
-        static List<quizItem> CreateListOfQuestions(string quizName)
-        {
-            var listOfQuestions = new List<quizItem>(10);
-
-            while (true)
-            {
-                var newQuestion = GetUsersQuestions();
-
-                if (newQuestion.question == "" || newQuestion.answer == "")
-                    break;
-                else listOfQuestions.Add(newQuestion);
-            }
-           
-            return listOfQuestions;
-        }
-
-        // The quiz exists. Does user want to take it
-        // or to add more questions
-        static void AskUser(string quizName)
-        {
-            Console.WriteLine("Quiz {0} exists. To take it press 1," 
-                                +"to add more questions press 2", quizName);
-            string usersInput = Console.ReadLine();
-
-            switch (usersInput)
-            {
-                case "1":
-                    TakeQuiz(quizName);
-                    break;
-                case "2":
-                    CreateListOfQuestions(quizName);
-                    break;
-                default:
-                    AskUser(quizName);
-                    break;
-
-            }
-        }
-
-        static void TakeQuiz(string quizName)
+        static void TakeQuiz(List<quizItem> quiz, string quizName)
         {
 
         }
         
-        public static void ReceiveUsersInput()
-        {
-            string quizName = GetQuizName();
-
-            if (CheckQuizes(quizName) == null)
-            {
-                var quiz = CreateListOfQuestions(quizName);
-                userQuizes.Add(quizName, quiz);
-            }
-            else AskUser(quizName);
-                
-            
-            Menu.Start();
-        }
+        
     }
 }
