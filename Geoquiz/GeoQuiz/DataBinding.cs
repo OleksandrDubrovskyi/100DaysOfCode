@@ -28,23 +28,12 @@ namespace GeoQuiz
 
                 foreach (var item in stringsFromFile)
                 {
-                    var result = item.Split('>');
+                    var result = item.Split('#');
                     var entry = new quizItem();
                     entry.question = result[0];
                     entry.answer = result[1];
                     quiz.Add(entry);
                 }
-
-                /*
-                for (int i = 0; i < stringsFromFile.Length; i++)
-                {
-                    var result = stringsFromFile[i].Split('>');
-                    var entry = new quizItem();
-                    entry.question = result[0];
-                    entry.answer = result[1];
-                    quiz.Add(entry);
-                }
-                */
             }
             return quiz;
         }
@@ -60,7 +49,7 @@ namespace GeoQuiz
 
             for (int i = 0; i < size; i++)
             {
-                tempString = quiz[i].question + ">" + quiz[i].answer;
+                tempString = quiz[i].question + "#" + quiz[i].answer;
                 stringArray[i] = tempString;
             }
             File.WriteAllLines(filePath, stringArray);

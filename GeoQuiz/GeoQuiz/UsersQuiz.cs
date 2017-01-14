@@ -48,14 +48,14 @@ namespace GeoQuiz
         // or to add more questions?
         static void AskUser(List<quizItem> quiz, string quizName)
         {
-            Console.WriteLine("Quiz {0} exists. To take it press 1,"
-                                + "to add more questions press 2", quizName);
+            Console.WriteLine("Quiz {0} exists. To take it press 1, "
+                                + "to add more questions press 2.", quizName);
             string usersInput = Console.ReadLine();
 
             switch (usersInput)
             {
                 case "1":
-                    TakeQuiz(quiz, quizName);
+                    TakeQuiz(quiz);
                     break;
                 case "2":
                     CreateListOfQuestions(quiz, quizName);
@@ -63,7 +63,6 @@ namespace GeoQuiz
                 default:
                     AskUser(quiz, quizName);
                     break;
-
             }
         }
 
@@ -96,11 +95,38 @@ namespace GeoQuiz
             return usersQuestion;
         }
 
-        static void TakeQuiz(List<quizItem> quiz, string quizName)
+        static void TakeQuiz(List<quizItem> quiz)
         {
+            new Random().Shuffle(quiz);//Randomize question order
 
+            int wrongAnswers = 0;
+            int rightAnswers = 0;
+            int number = 0; //number of the question being asked
+
+            while (number < quiz.Count && wrongAnswers < 3)
+            {
+                Console.WriteLine(quiz[number].question);
+                string usersAnswer = Console.ReadLine();
+
+                if (usersAnswer.ToLower() == quiz[number].answer.ToLower())
+                {
+                    rightAnswers++;
+                    Console.WriteLine("You are right! Your score is:{0}", rightAnswers);
+                }
+                else
+                {
+                    Console.WriteLine("Nope. The right answer is {0}.", quiz[number].answer);
+                    wrongAnswers++;
+                }
+
+                number++;
+            }
+
+            Console.WriteLine("You have scored {0} points out of {1}!\n\n", rightAnswers, quiz.Count);
+
+            Console.Clear();
+            Menu.Start();
         }
-        
-        
+
     }
 }

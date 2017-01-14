@@ -10,9 +10,8 @@ namespace GeoQuiz
     {
         public static void Start()
         {
-            Console.WriteLine("Welcome to the QuizMachine!\nWhat would you like to do?\n");
             Console.WriteLine("1. Take European capitals quiz.");
-            Console.WriteLine("2. Create your own quiz.");
+            Console.WriteLine("2. Create / take your own quiz.");
             Console.WriteLine("Press Enter to quit.\n\n");
 
             string usersInput = Console.ReadLine();
