@@ -13,10 +13,28 @@ namespace GeoQuiz
     /// </summary>
     class DataBinding
     {
+        public static string[] LoadFileNames()
+        {
+            string dirPath = @"C:\QuizMachine";
+            int firstIndex = dirPath.Length + 1; //To retrieve only the filenames
+                                                 //without path and extention
+
+            var files = Directory.GetFiles(dirPath);
+
+            for (int i = 0; i < files.Count(); i++)
+            {
+                int numberOfChars = (files[i].Length - dirPath.Length) - 5;
+                string fileName = files[i].Substring(firstIndex, numberOfChars);
+                files[i] = fileName;
+            }
+
+            return files;
+        }
+
         public static List<quizItem> LoadRecords(string quizName)
         {
-            string dirPath = @"C:\QuizMachine\" + quizName;
-            string filePath = dirPath + @"\entries.txt";
+            string dirPath = @"C:\QuizMachine\";
+            string filePath = dirPath + quizName + @"\.txt";
             var quiz = new List<quizItem>(15);
 
             if (!Directory.Exists(dirPath))

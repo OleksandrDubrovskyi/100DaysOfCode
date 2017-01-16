@@ -10,6 +10,15 @@ namespace GeoQuiz
     {
         public static void Start()
         {
+            var quizzes = DataBinding.LoadFileNames();
+
+            for (int i = 0; i < quizzes.Length; i++)
+            {
+                string output = String.Format((i+1) + ". " + quizzes[i] + ".\n");
+                Console.WriteLine(output);
+            }
+          
+
             Console.WriteLine("1. Take European capitals quiz.");
             Console.WriteLine("2. Create / take your own quiz.");
             Console.WriteLine("Press Enter to quit.\n\n");

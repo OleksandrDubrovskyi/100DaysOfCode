@@ -8,17 +8,12 @@ using System.Threading.Tasks;
 namespace GeoQuiz
 {
     class Quiz
-    {
-        struct quizItem
-        {
-            public string question;
-            public string answer;
-        }
-
-        List<quizItem> quiz = new List<quizItem>(20);
+    {     
 
         public Quiz()
         {
+            List<quizItem> quiz = new List<quizItem>(20);
+
             string filePath = "C:/Users/user/Desktop/Specter_C#/OtherProjects/GeoQuiz/capitals.txt";
 
             var stringsFromFile = File.ReadAllLines(filePath);
@@ -31,11 +26,37 @@ namespace GeoQuiz
                 entry.answer = result[1];
                 quiz.Add(entry);
             }
-
-            //new Random().Shuffle(listOfQuestions);// Randomize countries in the array
         }
 
-        public void TakeQuiz()
+        public Quiz(string quizName) //If we work with an already existing quiz
+        {
+            List<quizItem> quiz = DataBinding.LoadRecords(quizName);
+
+            foreach (var item in quiz)
+            {
+                Console.WriteLine(item.question);
+            }
+            Console.WriteLine("Quiz {0} exists. To take it press 1, "
+                                + "to add more questions press 2.", quizName);
+            string usersInput = Console.ReadLine();
+
+            TakeQuiz(quiz);
+/*
+            switch (usersInput)
+            {
+                case "1":
+                    TakeQuiz(quiz);
+                    break;
+                case "2":
+                    CreateListOfQuestions(quiz, quizName);
+                    break;
+                default:
+                    AskUser(quiz, quizName);
+                    break;
+            }*/
+        }
+
+        public void TakeQuiz(List<quizItem> quiz)
         {
             new Random().Shuffle(quiz);//Randomize question order
 
