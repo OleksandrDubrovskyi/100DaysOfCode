@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" media="screen" href="css/style.css" type="text/css">
+</head>
+
+<body>
+
+	<div id="wrapper">
+		
+			<h1>Arcanoid Remake</h1>
+
+			<canvas id="gameCanvas" width="800" height="600"></canvas>
+			
+			<p>The remake based on Chris DeLeon's course on udemy:</p>
+			<p><a href="https://www.udemy.com/how-to-program-games/learn/v4/content">
+			How to Program Games: Tile Classics in JS for HTML5 Canvas</a></p>
+	</div>
+	
+		<script>
+
+			var canvas;
+			var canvasContext;
+			var ballX = 400;
+			var ballY = 300;
+			var ballSpeedX = 12;
+			var ballSpeedY = 5;
+			var radius = 10; //Radius of the ball
+			
+			const PADDLE_HEIGHT = 10;
+			const PADDLE_WIDTH = 100;
+			var paddleX = 100;
+			
+			function calculateMousePos(evt){
+				var rect = canvas.getBoundingClientRect();
+				var root = document.documentElement;
+				var mouseX = evt.clientX - rect.left - root.scrollLeft;
+				var mouseY = evt.clientY - rect.top - root.scrollTop;
+				
+				return{
+					x:mouseX,
+					y:mouseY
+				};
+			}
+			
+			window.onload = function() {
+				canvas = document.getElementById('gameCanvas');
+				canvasContext = canvas.getContext('2d');
+				
+				var framesPerSecond = 30;
+				setInterval(callBoth, 1000/framesPerSecond);
+				
+				canvas.addEventListener('mousedown', handleMouseClick);
+
+				canvas.addEventListener('mousemove',
+					function(evt){
+						var mousePos = calculateMousePos(evt);
+						paddleX = mousePos.x - (PADDLE_WIDTH/2);
+				});
+			}
+			
+			function callBoth(){
+				moveEverything();
+				drawEverything();			
+			}
+			
+			function moveEverything(){
+				
+				ballX += ballSpeedX;
+				ballY += ballSpeedY;
+				
+				if (ballX + radius >= canvas.width || ballX - radius <= 0) {
+					ballSpeedX *= -1;
+				}
+				
+				if (ballY + radius >= canvas.height || ballY - radius <= 0) {
+					ballSpeedY *= -1;
+				}
+			}
+					
+			function ballReset(){		
+				ballSpeedY = ballSpeedY * 0.33;
+				ballX = canvas.width/2;
+				ballY = canvas.height/2;
+			}
+			
+			function drawEverything(){	
+				//Canvas
+				colorRect(0,0,canvas.width,canvas.height, 'black');
+				
+				//Ball
+				colorCircle(ballX, ballY, radius, "white");
+				
+				//Paddle
+				colorRect(canvas.width/2,canvas.height-(canvas.height/10), PADDLE_WIDTH,PADDLE_HEIGHT, 'white');
+		
+			}
+			
+			function colorCircle(centerX, centerY, radius, drawColor){
+				canvasContext.fillStyle = drawColor;
+				canvasContext.beginPath();
+				canvasContext.arc(centerX, centerY, radius, 0, Math.PI*2, true);
+				canvasContext.fill();
+			}
+			
+			function colorRect(leftX, topY, widht, height, drawColor){
+				canvasContext.fillStyle = drawColor;
+				canvasContext.fillRect(leftX, topY, widht, height);
+			}
+			
+		</script>
+	</body>
+</html>
