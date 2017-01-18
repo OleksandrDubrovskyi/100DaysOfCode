@@ -40,7 +40,7 @@
 				
 				return{
 					x:mouseX,
-					//y:mouseY
+					y:mouseY
 				};
 			}
 			
@@ -51,7 +51,7 @@
 				var framesPerSecond = 30;
 				setInterval(callBoth, 1000/framesPerSecond);
 				
-				canvas.addEventListener('mousedown', handleMouseClick);
+				//canvas.addEventListener('mousedown', handleMouseClick);
 
 				canvas.addEventListener('mousemove',
 					function(evt){
@@ -64,7 +64,7 @@
 				moveEverything();
 				drawEverything();			
 			}
-			
+						
 			function moveEverything(){
 				
 				ballX += ballSpeedX;
@@ -74,13 +74,20 @@
 					ballSpeedX *= -1;
 				}
 				
-				if (ballY + radius >= canvas.height || ballY - radius <= 0) {
+				if (ballY - radius <= 0) {
 					ballSpeedY *= -1;
 				}
+				
+				if ((ballY + radius) >= canvas.height-(canvas.height/10)) 
+					//&& !(ballX <= (paddleX - PADDLE_WIDTH/2)))
+					//|| ballX >= (paddleX + PADDLE_WIDTH/2)))
+				{
+					
+					ballReset();
+				} 
 			}
 					
 			function ballReset(){		
-				ballSpeedY = ballSpeedY * 0.33;
 				ballX = canvas.width/2;
 				ballY = canvas.height/2;
 			}
@@ -93,7 +100,7 @@
 				colorCircle(ballX, ballY, radius, "white");
 				
 				//Paddle
-				colorRect(canvas.width/2,canvas.height-(canvas.height/10), PADDLE_WIDTH,PADDLE_HEIGHT, 'white');
+				colorRect(paddleX,canvas.height-(canvas.height/10), PADDLE_WIDTH,PADDLE_HEIGHT, 'white');
 		
 			}
 			
