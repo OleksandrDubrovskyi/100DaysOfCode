@@ -3,59 +3,102 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace TikTakToe
 {
+    //Custom helper types
+    enum sign { X, O };
+    struct boardCoordinate { public int row; public int column; }
+
     class Game
     {
-        enum sign {X, O};
+        //Initial values for the gameplay
+        static string[,] gameBoard = new string[3, 3];
         static sign currentSign = sign.X;
-        static char[,] gameBoard = new char[3, 3];
+        const int MAX_NUMBER_OF_TURNS = 9; //3 rows by 3 columns
+        static int numberOfTurnsMade = 0;
 
+        //The gameplay method
         public static void Start()
         {
-            InitializeGameBoard();
-            PrintGameBoard();
+            Draw.InitialGameBoard(gameBoard);
 
             while (true)
             {
+                numberOfTurnsMade ++;
+
                 //Print prompt and receive coordinates of the turn
-                Console.WriteLine("Enter coordinates. {0}:_", currentSign);
-                string coordinates = Console.ReadLine();
+                var coordinates = ReceiveCoordinates(currentSign);                
+                gameBoard[coordinates.row, coordinates.column] = currentSign.ToString();
 
-                UpdateCurrentBoard(currentSign, coordinates);
-                gameBoard[1, 1] = 'X';
-                PrintGameBoard();
+                Draw.CurrentGameBoard(gameBoard);
                 ChangeCurrentSign();
+
+                if(IsGameOver()) break;
             }
+
+            //Output the final board and result of the game
         }
 
-        static void PrintGameBoard()
+        static boardCoordinate ReceiveCoordinates(sign currentSign)
         {
-            for (int i = 0; i < 3; i++)
+            string rawCoordinates;
+            boardCoordinate coordinates;
+            bool isCellEmpty = false;
+            bool isRightFormat = false;
+
+            do
             {
-                for (int j = 0; j < 3; j++)
+                do
                 {
-                    if (gameBoard[i, j] == ' ')
-                    {
-                        Console.Write("{0},{1} | ", i, j);
-                    }
+                    Console.Write("\n  Enter coordinates of your move. {0}: ", currentSign);
+                    rawCoordinates = Console.ReadLine();
+
+                    if (!CheckCoordinates(rawCoordinates))
+                        Console.WriteLine("\n  Invalid format or out of range. Please try again.");
                     else
-                    {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.Write(gameBoard[i, j]);
-                        Console.ResetColor();
-                        Console.Write("  |  ");
-                    }
+                        isRightFormat = true;
                 }
-                Console.WriteLine("\n");
-                Console.WriteLine("______________\n");
-            }
+                while (!isRightFormat);
+
+                coordinates = ParseCoordinates(rawCoordinates);
+
+                if (gameBoard[coordinates.row, coordinates.column] != " ")
+                    Console.WriteLine("\n  This cell is already occupied. Please try again.");
+                else
+                    isCellEmpty = true;
+
+            } while (!isCellEmpty);
+            
+            return coordinates;
         }
 
-        static void UpdateCurrentBoard(sign currentSign, string coordinates)
+        static bool CheckCoordinates(string rawCoordinates)
         {
+            return Regex.Match(rawCoordinates, @"[012][ ,\.][012]").Success;
+        }
 
+        static boardCoordinate ParseCoordinates(string rawCoordinates)
+        {
+            var coordinate = new boardCoordinate();
+
+            coordinate.row = int.Parse(rawCoordinates.ToCharArray()[0].ToString());
+            coordinate.column = int.Parse(rawCoordinates.ToCharArray()[2].ToString());
+
+            return coordinate;
+        }
+
+        static bool IsGameOver()
+        {
+            if (numberOfTurnsMade >= MAX_NUMBER_OF_TURNS)
+            {
+                Console.WriteLine("\nGame over!\n");
+                return true;
+            }
+                
+
+            else return false;
         }
 
         static void ChangeCurrentSign()
@@ -64,17 +107,6 @@ namespace TikTakToe
                 currentSign = sign.O;
             else if (currentSign == sign.O)
                 currentSign = sign.X;
-        }
-
-        static void InitializeGameBoard()
-        {
-            for (int i = 0; i < 3; i++)
-            {
-                for (int j = 0; j < 3; j++)
-                {
-                    gameBoard[i, j] = ' ';
-                }
-            }
         }
     }
 }
