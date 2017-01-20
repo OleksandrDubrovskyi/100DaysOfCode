@@ -8,6 +8,32 @@ namespace TikTakToe
 {
     class Draw
     {
+        public static void Welcome()
+        {
+            //Text generated @ patorjk.com/software/taag
+
+            string welcome = 
+                
+                @"
+ __      __        __                                  __             
+/  \    /  \ ____ |  |   ____  ____   _____   ____   _/  |_  ____     
+\   \/\/   // __ \|  | _/ ___\/  _ \ /     \_/ __ \  \   __\/  _ \    
+ \        /\  ___/|  |_\  \__(  <_> )  Y Y  \  ___/   |  | (  <_> )   
+  \__/\  /  \___  >____/\___  >____/|__|_|  /\___  >  |__|  \____/    
+       \/       \/          \/            \/     \/                   
+___________.__ __   ___________       __   ___________             ._.
+\__    ___/|__|  | _\__    ___/____  |  | _\__    ___/___   ____   | |
+  |    |   |  |  |/ / |    |  \__  \ |  |/ / |    | /  _ \_/ __ \  | |
+  |    |   |  |    <  |    |   / __ \|    <  |    |(  <_> )  ___/   \|
+  |____|   |__|__|_ \ |____|  (____  /__|_ \ |____| \____/ \___  >  __
+                   \/              \/     \/                   \/   \/
+
+";
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.WriteLine(welcome);
+            Console.ResetColor();
+        }
+
         public static void InitialGameBoard(string[,] gameBoard)
         {
             for (int i = 0; i < 3; i++)
@@ -24,11 +50,11 @@ namespace TikTakToe
         public static void CurrentGameBoard(string[,] gameBoard)
         {
             Console.Clear();
-            Console.WriteLine("\n\n");
+            Welcome();
 
             for (int i = 0; i < 3; i++)
             {
-                Console.Write("   ");
+                Console.Write("             ");
 
                 for (int j = 0; j < 3; j++)
                 {
@@ -54,9 +80,9 @@ namespace TikTakToe
                         if (j < 2) Console.Write("  |  ");
                     }
                 }
-                if (i < 2) Console.WriteLine("\n   ___________________\n");
+                if (i < 2) Console.WriteLine("\n            ___________________\n");
             }
-            Console.WriteLine();
+            Console.WriteLine("\n");
         }
     }
 }
