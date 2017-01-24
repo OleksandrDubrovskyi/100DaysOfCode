@@ -17,9 +17,9 @@ namespace GeoQuiz
         static void Main(string[] args)
         {
             //Console.WriteLine("Welcome to the QuizMachine!\nWhat would you like to do?\n");
-            //Menu.Start();
+            AnsweringBox.Start();
 
-            var quiz = new Quiz("entries");
+            //var quiz = new Quiz("entries");
             //quiz.TakeQuiz();
 
            

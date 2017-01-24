@@ -43,7 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Countries.cs" />
+    <Compile Include="AnsweringBox.cs" />
+    <Compile Include="GeographyQuiz.cs" />
     <Compile Include="DataBinding.cs" />
     <Compile Include="Menu.cs" />
     <Compile Include="Program.cs" />
