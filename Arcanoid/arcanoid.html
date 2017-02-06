@@ -32,6 +32,7 @@
 			const PADDLE_WIDTH = 100;
 			var paddleX = 100;
 			
+			
 			function calculateMousePos(evt){
 				var rect = canvas.getBoundingClientRect();
 				var root = document.documentElement;
@@ -64,7 +65,8 @@
 				moveEverything();
 				drawEverything();			
 			}
-						
+				
+			
 			function moveEverything(){
 				
 				ballX += ballSpeedX;
@@ -78,13 +80,25 @@
 					ballSpeedY *= -1;
 				}
 				
-				if ((ballY + radius) >= canvas.height-(canvas.height/10)) 
-					//&& !(ballX <= (paddleX - PADDLE_WIDTH/2)))
-					//|| ballX >= (paddleX + PADDLE_WIDTH/2)))
+				if (ballY + radius >= canvas.height) {ballReset();}
+				
+				const PADDLE_DIST_FROM_BOTTOM = canvas.height-(canvas.height/10);
+				
+				var paddleTopEdgeY = canvas.height - PADDLE_DIST_FROM_BOTTOM;
+				var paddleBottomEdgeY = PADDLE_DIST_FROM_BOTTOM + PADDLE_HEIGHT;
+				var paddleLeftEdgeX = paddleX;
+				var paddleRightEdgeX = paddleX + PADDLE_WIDTH;
+				
+				if (ballY> PADDLE_DIST_FROM_BOTTOM &&
+					ballY <= paddleBottomEdgeY &&
+					ballX > paddleLeftEdgeX &&
+					ballX < paddleRightEdgeX) 
+					
 				{
 					
-					ballReset();
+					ballSpeedY *= -1;
 				} 
+				
 			}
 					
 			function ballReset(){		
