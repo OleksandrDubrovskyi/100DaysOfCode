@@ -32,12 +32,14 @@
 			const PADDLE_WIDTH = 100;
 			var paddleX = 100;
 			
-			
+			var mouseX;
+			var mouseY;
+				
 			function calculateMousePos(evt){
 				var rect = canvas.getBoundingClientRect();
 				var root = document.documentElement;
-				var mouseX = evt.clientX - rect.left - root.scrollLeft;
-				var mouseY = evt.clientY - rect.top - root.scrollTop;
+				mouseX = evt.clientX - rect.left - root.scrollLeft;
+				mouseY = evt.clientY - rect.top - root.scrollTop;
 				
 				return{
 					x:mouseX,
@@ -97,6 +99,10 @@
 				{
 					
 					ballSpeedY *= -1;
+					
+					var centerOfPaddle = paddleX + PADDLE_WIDTH/2;
+					var ballDistFromPaddleCenter = ballX - centerOfPaddle;
+					ballSpeedX = ballDistFromPaddleCenter * .35;
 				} 
 				
 			}
@@ -115,6 +121,9 @@
 				
 				//Paddle
 				colorRect(paddleX,canvas.height-(canvas.height/10), PADDLE_WIDTH,PADDLE_HEIGHT, 'white');
+				
+				
+				colorText(mouseX+","+mouseY, mouseX,mouseY, "yellow")
 		
 			}
 			
@@ -128,6 +137,11 @@
 			function colorRect(leftX, topY, widht, height, drawColor){
 				canvasContext.fillStyle = drawColor;
 				canvasContext.fillRect(leftX, topY, widht, height);
+			}
+			
+			function colorText(showWords, textX,textY, fillColor){
+				canvasContext.fillStyle = fillColor;
+				canvasContext.fillText(showWords, textX,textY);
 			}
 			
 		</script>
