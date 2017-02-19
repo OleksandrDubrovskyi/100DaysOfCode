@@ -9,6 +9,9 @@
 <canvas id="gameCanvas" width="800" height="600"></canvas>
 
 <script>
+var carPic = document.createElement("img");
+var carPicLoaded = false;
+
 var carX = 75;
 var carY = 75;
 var carSpeedX = 5;
@@ -22,18 +25,18 @@ const TRACK_ROWS = 15;
 var trackGrid = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 				 1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,
 				 1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-				 1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,
-				 1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,
+				 1,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,1,
+				 1,0,0,0,0,0,0,0,1,1,1,0,0,0,0,1,0,0,0,1,
 				 1,0,0,1,1,0,0,1,1,1,1,1,0,0,0,1,1,0,0,1,
 				 1,0,0,1,0,0,0,0,1,1,1,0,0,0,0,0,1,0,0,1,
-				 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-				 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-				 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-				 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-				 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-				 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-				 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-				 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,];
+				 1,0,0,1,0,0,0,0,1,1,1,0,0,0,0,0,1,0,0,1,
+				 1,0,0,1,0,0,0,0,1,1,1,0,0,0,0,0,1,0,0,1,
+				 1,0,0,1,0,0,0,0,1,1,1,0,0,0,0,0,1,0,0,1,
+				 1,0,0,1,0,0,0,0,1,1,1,0,0,0,0,0,1,0,0,1,
+				 1,0,0,1,0,0,2,0,1,1,1,0,0,0,0,0,1,0,0,1,
+				 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+				 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+				 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1];
 
 var canvas, canvasContext;
 
@@ -43,7 +46,12 @@ window.onload = function() {
 
 	var framesPerSecond = 30;
 	setInterval(updateAll, 1000/framesPerSecond);
-
+	
+	carPic.onload = function() {
+		carPicLoaded = true;
+	}
+	carPic.src = "player1car.png";
+	
 	carReset();
 }
 
@@ -53,8 +61,18 @@ function updateAll() {
 }
 
 function carReset() {
-	carX = canvas.width/2 + 50;
-	carY = canvas.height/2;
+
+	for(var eachRow=0;eachRow<TRACK_ROWS;eachRow++) {
+		for(var eachCol=0;eachCol<TRACK_COLS;eachCol++) {
+			var arrayIndex = rowColToArrayIndex(eachCol, eachRow); 
+
+			if(trackGrid[arrayIndex] == 2) {
+				trackGrid[arrayIndex] = 0;
+				carX = eachCol * TRACK_W;
+				carY = eachRow * TRACK_H;
+			} // end of is this track here
+		} // end of for each track
+	} 
 }
 
 function carMove() {
@@ -80,7 +98,7 @@ function isTrackAtColRow(col, row) {
 	if(col >= 0 && col < TRACK_COLS &&
 		row >= 0 && row < TRACK_ROWS) {
 		 var trackIndexUnderCoord = rowColToArrayIndex(col, row);
-		 return trackGrid[trackIndexUnderCoord];
+		 return (trackGrid[trackIndexUnderCoord] == 1);
 	} else {
 		return false;
 	}
@@ -95,7 +113,6 @@ function carTrackHandling() {
 		carTrackRow >= 0 && carTrackRow < TRACK_ROWS) {
 
 		if(isTrackAtColRow( carTrackCol,carTrackRow )) {
-			trackGrid[trackIndexUnderCar] = false;
 
 			var prevCarX = carX - carSpeedX;
 			var prevCarY = carY - carSpeedY;
@@ -127,7 +144,7 @@ function carTrackHandling() {
 } // end of carTrackHandling func
 
 function moveAll() {
-	carMove();
+	//carMove();
 	
 	carTrackHandling();
 }
@@ -143,7 +160,7 @@ function drawTracks() {
 
 			var arrayIndex = rowColToArrayIndex(eachCol, eachRow); 
 
-			if(trackGrid[arrayIndex]) {
+			if(trackGrid[arrayIndex] == 1) {
 				colorRect(TRACK_W*eachCol,TRACK_H*eachRow,
 					TRACK_W-TRACK_GAP,TRACK_H-TRACK_GAP, 'blue');
 			} // end of is this track here
@@ -155,8 +172,11 @@ function drawTracks() {
 function drawAll() {
 	colorRect(0,0, canvas.width,canvas.height, 'black'); // clear screen
 
-	colorCircle(carX,carY, 10, 'white'); // draw car
-
+	if(carPicLoaded){
+		canvasContext.drawImage(carPic,
+					carX - carPic.width/2, carY - carPic.height/2);
+	}
+	
 	drawTracks();
 }
 
